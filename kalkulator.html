@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Drogi Zatrzymania</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        input { width: 100%; padding: 8px; margin: 5px 0; }
+        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; }
+        #result { font-size: 20px; font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Kalkulator Drogi Zatrzymania</h2>
+        <label>Prędkość początkowa V₀ (km/h):</label>
+        <input type="number" id="velocity" placeholder="Wpisz V₀" required>
+        
+        <label>Czas reakcji (s):</label>
+        <input type="number" id="reactionTime" placeholder="Wpisz t_r" required>
+        
+        <label>Czas zwłoki układu hamulcowego (s):</label>
+        <input type="number" id="brakeDelay" placeholder="Wpisz tₙ" required>
+        
+        <label>Opóźnienie hamowania aₕ (m/s²):</label>
+        <input type="number" id="deceleration" placeholder="Wpisz aₕ" required>
+        
+        <button onclick="calculateStoppingDistance()">Oblicz</button>
+        <p id="result"></p>
+    </div>
+    
+    <script>
+        function calculateStoppingDistance() {
+            let V0_kmh = parseFloat(document.getElementById('velocity').value);
+            let t_r = parseFloat(document.getElementById('reactionTime').value);
+            let t_n = parseFloat(document.getElementById('brakeDelay').value);
+            let a_h = parseFloat(document.getElementById('deceleration').value);
+            
+            if (isNaN(V0_kmh) || isNaN(t_r) || isNaN(t_n) || isNaN(a_h) || a_h <= 0) {
+                document.getElementById('result').innerText = "Wprowadź poprawne wartości!";
+                return;
+            }
+            
+            let V0 = V0_kmh / 3.6; // Konwersja km/h na m/s
+            let Sz = V0 * (t_r + (t_n / 2)) + (V0 * V0) / (2 * a_h);
+            
+            document.getElementById('result').innerText = "Droga zatrzymania Sz: " + Sz.toFixed(2) + " m";
+        }
+    </script>
+</body>
+</html>
